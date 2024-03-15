@@ -1,0 +1,27 @@
+service: apigw-trace-demo
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+custom:
+  datadog:
+    apiKey: ${env:DD_API_KEY}
+    captureLambdaPayload: true
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          method: get
+          path: /hello
+  traceContext:
+    handler: handler.traceContext
+    events:
+      - httpApi:
+          method: get
+          path: /traceContext
+
+plugins:
+  - serverless-plugin-datadog
